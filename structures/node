@@ -1,0 +1,41 @@
+class Node:
+    def __init__(self, value=0):
+        self._value = value
+        self.children = []
+        self.parents = []
+        self.visited = False    # For BFS
+        self._cost = None        # For A*
+    
+    @property
+    def value(self):
+        return self._value
+
+    @property
+    def cost(self):
+        return self._cost   
+    
+    @value.setter
+    def value(self, x):
+        self._value = x
+
+    @cost.setter
+    def cost(self, x):
+        self._cost = x
+    
+    def addChild(self, x: "Node") -> None:
+        self.children.append(x)
+
+    def addParent(self, x: "Node") -> None:
+        self.parents.append(x)
+
+    def visit(self):
+        self.visited = True
+    
+    def unvisit(self):
+        self.visited = False
+    
+    def getVisit(self):
+        return self.visited
+    
+    def __str__(self):
+        return f"Node(value={self.value}, visited={self.visited}, cost={self.cost})\n{len(self.children)} children: {self.children}\n{len(self.parents)} parents: {self.parents}"
