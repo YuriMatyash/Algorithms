@@ -21,7 +21,7 @@ def bfs(graph: Graph, start: Node) -> dict[Node, list]:
     
     while queue:
         currentNode = queue.pop(0)
-        for neighbor in graph.getChildrens(currentNode):
+        for neighbor in graph.getChildren(currentNode):
             if neighbor not in visited:
                 visited.add(neighbor)
                 queue.append(neighbor)
@@ -32,8 +32,36 @@ def bfs(graph: Graph, start: Node) -> dict[Node, list]:
             
 
 # Depth-first search
-def DFS():
-    return
+# returns dict{Node: list[d, f, pi]}
+# where:    d   -   discovery time
+#           f   -   finish time
+#           pi  -   Node's parent
+def DFS(graph: Graph) -> dict[Node, list]:
+    color = {}
+    result = {}
+    time = [0]          # can't use int, python makes it local to DFS, can't use in DFS_visit
+
+    for node in graph.nodes():
+        result[node] = [0,0, None]
+        color[node] = "white"
+
+    def DFS_visit(currentNode: Node):
+        color[currentNode] = "gray"
+        time[0] += 1
+        result[currentNode][0] = time[0]                    # first pass(d array)
+        for neighbor in graph.getChildren(currentNode):
+            if color[neighbor] ==  "white":
+                result[neighbor][2] = currentNode           # set node's parent(pi array)
+                DFS_visit(neighbor)
+        color[currentNode] = "black"
+        time[0] += 1
+        result[currentNode][1] = time[0]                    # final pass(f array)
+
+    for node in graph.nodes():
+        if color[node] == "white":
+            DFS_visit(node)
+
+    return result
 
 def topological_sort():
     return
