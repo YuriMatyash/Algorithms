@@ -33,14 +33,46 @@ def BFS_example():
         parent_val = parent.value if parent else None
         print(f"{node.value}: distance = {distance}, parent = {parent_val}")
 
+def DFS_example():
+    a = Node("A")
+    b = Node("B")
+    c = Node("C")
+    d = Node("D")
+    e = Node("E")
+
+    graph = GraphDirected([a, b, c, d, e], [
+        (a, b),
+        (a, c),
+        (b, d),
+        (c, d),
+        (d, e)
+    ])
+
+    print("Graph:")
+    print(graph)
+
+    # Run DFS
+    result = DFS(graph)
+
+    print("\nDFS result:")
+    for node in result:
+        d, f, pi = result[node]
+        parent = pi.value if pi else None
+        print(f"{node.value}: d={d}, f={f}, pi={parent}")
+
+
 def main():
     examples = {
-        1: BFS_example
+        1: BFS_example,
+        2: DFS_example
     }
     
     while True:
         print("What type of algorithm would you like to run an example of?")
-        print("1 - BFS")
+        print(
+            "1 - BFS" \
+            "\n2 - DFS"
+        )
         key = input("Press key: ")
         try:
             key = int(key)
