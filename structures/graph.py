@@ -1,5 +1,6 @@
 from .node import Node
 
+# Graph is represented by an adjacency list
 class Graph:
     def __init__(self, V: list[Node] = [], E: list[tuple[Node,Node]] = []):
         self.adj_list = {}              #   dict{Node: list[Node]}
