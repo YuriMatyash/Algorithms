@@ -28,7 +28,7 @@ class Graph:
         # Implimented in GraphDirected and GraphUndirected
         return
 
-    def getChildrens(self, node: Node) -> list[Node]:
+    def getChildren(self, node: Node) -> list[Node]:
         return self.adj_list.get(node, [])                          # returns list of children
 
     def nodes(self) -> list[Node]:
