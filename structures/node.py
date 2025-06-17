@@ -3,7 +3,7 @@ class Node:
         self.value = value
 
     # Lets you compare class objects
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if not isinstance(other, Node):         # not Node object
             return False
         return self.value == other.value        # check if they have the same value
