@@ -33,6 +33,7 @@ def BFS_example():
         parent_val = parent.value if parent else None
         print(f"{node.value}: distance = {distance}, parent = {parent_val}")
 
+
 def DFS_example():
     a = Node("A")
     b = Node("B")
@@ -61,17 +62,48 @@ def DFS_example():
         print(f"{node.value}: d={d}, f={f}, pi={parent}")
 
 
+def edge_classification_example():
+    a = Node("A")
+    b = Node("B")
+    c = Node("C")
+    d = Node("D")
+    e = Node("E")
+
+    graph = GraphDirected([a, b, c, d, e], [
+        (a, b),
+        (a, c),
+        (b, d),
+        (c, d),
+        (d, e),
+        (e, b)   # back edge
+    ])
+
+    print("Graph:")
+    print(graph)
+
+    edge_types = classify_edges(graph)
+
+    print("\nEdge Classification:")
+    for edge_type in edge_types:
+        print(f"{edge_type.upper()} edges:")
+        for u, v in edge_types[edge_type]:
+            print(f"  {u.value} → {v.value}")
+        print()
+
+
 def main():
     examples = {
         1: BFS_example,
-        2: DFS_example
+        2: DFS_example,
+        3: edge_classification_example
     }
     
     while True:
         print("What type of algorithm would you like to run an example of?")
         print(
             "1 - BFS" \
-            "\n2 - DFS"
+            "\n2 - DFS"\
+            "\n3 - Directed Graph - Edge Classification"
         )
         key = input("Press key: ")
         try:

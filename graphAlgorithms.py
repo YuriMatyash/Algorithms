@@ -63,6 +63,40 @@ def DFS(graph: Graph) -> dict[Node, list]:
 
     return result
 
+
+# Classify edges
+# returns dict{str: list[tuple(Node1,Node2)]}
+# where:    str     -   type of edge(tree,forward,back,corss)
+#           Node1   -   source node
+#           Node2   -   target node
+def classify_edges(graph: GraphDirected) -> dict[str, list]:
+    d,f,pi = {},{},{}
+    result = {
+        "tree":[],              #   node2 is child of node1
+        "forward":[],           #   d[node1] < d[node2] < f[node2] < f[node1]   &&  not tree edge
+        "back":[],              #   d[node2] < d[node1] < f[node1] < f[node2]
+        "cross":[]              #   f[noe2] < d[node1]
+    }
+    DFS_result = DFS(graph)
+    for node in DFS_result:
+        d[node] = DFS_result[node][0]
+        f[node] = DFS_result[node][1]
+        pi[node] = DFS_result[node][2]
+
+    for node1 in graph.nodes():
+        for node2 in graph.getChildren(node1):
+            if pi[node2] == node1:
+                result["tree"].append((node1,node2))
+            elif d[node1] < d[node2] and f[node2] < f[node1]:
+                result["forward"].append((node1,node2))
+            elif d[node2] < d[node1] and f[node1] < f[node2]:
+                result["back"].append((node1,node2))
+            elif f[node2] < d[node1]:
+                result["cross"].append((node1,node2))
+    
+    return result
+        
+
 def topological_sort():
     return
 
