@@ -1,10 +1,10 @@
 # Algorithms
-A collection of algorithm learnt during Algorithms 1+2 at H.I.T(Holon's Institute of Technology)
+A collection of algorithm learnt during Algorithms 1+2 at H.I.T(Holon's Institute of Technology)<br>
 All implemented in python for the sake of learning and deep understanding
 
 ## Algorithms covered
 
-There are `util functions` and there are the main algorithms 
+There are `util functions` and there are the main algorithms<br>
 All of these are covered inside `graphAlgorithms.py`
 
 - `transpose()`                 - transpose graph
@@ -14,7 +14,7 @@ All of these are covered inside `graphAlgorithms.py`
 - `isWeaklyConnected()`         - check if directed graph is weakly connected
 - `isStronglyConnected()`       - check if directed graph is strongly connected
 - DFS
-- Edge Classification(Using DFS)
+- Edge Classification
 - `isDAG()`                     - Check if the graph is a directed acyclic graph
 - Topological Sort
 
