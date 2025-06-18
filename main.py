@@ -128,12 +128,15 @@ def main():
             "\n3 - Directed Graph - Edge Classification"\
             "\n4 - Directed Acyclic Graph - Topological Sort"
         )
+        print("TO EXIT WRITE 0")
         key = input("Press key: ")
         try:
             key = int(key)
         except ValueError:
             print("Invalid input. Please enter a number.\n")
             continue
+        if key == 0:
+            break
 
         if key in examples:
             print('\n\n#################################################################################\n')
