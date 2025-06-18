@@ -2,12 +2,13 @@ from structures.node import Node
 from structures.graph import Graph
 from structures.graphDirected import GraphDirected
 from structures.graphUndirected import GraphUndirected
+from util import isDAG
 
 # Breadth-First Search
 # returns dict{Node: list[d, pi]}
 # where:    d   -   distance from start
 #           pi  -   Node's parent
-def bfs(graph: Graph, start: Node) -> dict[Node, list]:
+def BFS(graph: Graph, start: Node) -> dict[Node, list]:
     result = {}
     queue = []
     visited = set()             # Better than a list, o(1) access instead of o(n)
@@ -97,9 +98,36 @@ def classify_edges(graph: GraphDirected) -> dict[str, list]:
     return result
         
 
+# Makes a topological sort using DFS
+# in the returned stack the sort is from left to right
+# if in the grab A->B
+# Then the resulting stack will have [A,B]
+# If the graph is not DAG then it returns None(No valid topological sort)
+def topological_sort(graph: GraphDirected) -> list[Node]:
+    if not isDAG(graph):
+        return None
+    
+    color = {}
+    result = []
 
-def topological_sort():
-    return
+    for node in graph.nodes():
+        color[node] = "white"
+
+    def DFS_visit(currentNode: Node):
+        color[currentNode] = "gray"
+        for neighbor in graph.getChildren(currentNode):
+            if color[neighbor] ==  "white":
+                DFS_visit(neighbor)
+        color[currentNode] = "black"
+        result.append(currentNode)
+
+    for node in graph.nodes():
+        if color[node] == "white":
+            DFS_visit(node)
+    
+    result.reverse()
+    return result
+
 
 # Strongly Connected Components
 def SCC():

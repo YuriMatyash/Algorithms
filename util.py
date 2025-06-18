@@ -2,7 +2,7 @@ from structures.node import Node
 from structures.graph import Graph
 from structures.graphDirected import GraphDirected
 from structures.graphUndirected import GraphUndirected
-from .graphAlgorithms import classify_edges, DFS, BFS
+from graphAlgorithms import classify_edges, DFS, BFS
 
 # Checks if a graph is a DAG - Directed Acyclic Graph
 # if during a DFS we detect a back edge, there's a cycle inside the graph -> It isn't DAG

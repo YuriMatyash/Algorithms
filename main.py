@@ -25,7 +25,7 @@ def BFS_example():
     print(graph)
 
     # Run BFS starting from node A
-    result = bfs(graph, A)
+    result = BFS(graph, A)
 
     # Print BFS results
     print("\nBFS Results:")
@@ -91,19 +91,42 @@ def edge_classification_example():
         print()
 
 
+def topological_sort_example():
+    A = Node("A")
+    B = Node("B")
+    C = Node("C")
+    D = Node("D")
+    E = Node("E")
+
+    graph = GraphDirected(
+        V=[A, B, C, D, E],
+        E=[(A, C),(B, C),(C, D),(D, E)]
+    )
+
+    print("Graph:")
+    print(graph)
+    print()
+
+    topo_order = topological_sort(graph)
+    print("Topological Sort:")
+    print(" → ".join(str(node) for node in topo_order))
+
+
 def main():
     examples = {
         1: BFS_example,
         2: DFS_example,
-        3: edge_classification_example
+        3: edge_classification_example,
+        4: topological_sort_example
     }
     
     while True:
         print("What type of algorithm would you like to run an example of?")
         print(
-            "1 - BFS" \
-            "\n2 - DFS"\
-            "\n3 - Directed Graph - Edge Classification"
+            "1 - Graph - BFS" \
+            "\n2 - Graph - DFS"\
+            "\n3 - Directed Graph - Edge Classification"\
+            "\n4 - Directed Acyclic Graph - Topological Sort"
         )
         key = input("Press key: ")
         try:
