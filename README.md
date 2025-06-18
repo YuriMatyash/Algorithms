@@ -5,6 +5,7 @@ A collection of algorithm learnt during Algorithms 1+2 at H.I.T(Holon's Institut
 
 - BFS
 - DFS
+- Edge Classification(Using DFS)
 
 ## How to use
 

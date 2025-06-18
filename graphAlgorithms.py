@@ -64,9 +64,9 @@ def DFS(graph: Graph) -> dict[Node, list]:
     return result
 
 
-# Classify edges
+# Classify edges of a directed graph
 # returns dict{str: list[tuple(Node1,Node2)]}
-# where:    str     -   type of edge(tree,forward,back,corss)
+# where:    str     -   type of edge(tree,forward,back,cross)
 #           Node1   -   source node
 #           Node2   -   target node
 def classify_edges(graph: GraphDirected) -> dict[str, list]:
@@ -96,6 +96,7 @@ def classify_edges(graph: GraphDirected) -> dict[str, list]:
     
     return result
         
+
 
 def topological_sort():
     return
