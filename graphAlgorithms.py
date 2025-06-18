@@ -19,7 +19,7 @@ def transpose(graph: GraphDirected) -> GraphDirected:
     for edge in edges:
         left = nodeMap[edge[0]]
         right = nodeMap[edge[1]]
-        newGraph.addEdge((right,left))      # flips them, that's the whole point of the transpose
+        newGraph.addEdge((right,left), weight=graph.weights[edge[0]][edge[1]])      # flips them, that's the whole point of the transpose
 
     return newGraph
 
@@ -40,7 +40,7 @@ def removeDirections(graph: GraphDirected) -> GraphUndirected:
     for edge in edges:
         left = nodeMap[edge[0]]
         right = nodeMap[edge[1]]
-        newGraph.addEdge((left, right))
+        newGraph.addEdge((left, right), weight = 0)         # Makes no sense to keep weights, if there's an edge both way which weight would we keep
     
     return newGraph
 
