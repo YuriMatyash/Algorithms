@@ -14,12 +14,12 @@ All of these are covered inside `graphAlgorithms.py`
 
 All of these are covered inside `util.py`
 
-- isDAG()                   - Check if the graph is a directed acyclic graph
-- transpose()               - transpose graph
-- isConnected()             - check if undirected graph is connected
-- removeDirections()        - Turn a directed graph into an undirected graph
-- isWeaklyConnected()       - check if directed graph is weakly connected
-- isStronglyConnected()     - check if directed graph is strongly connected
+- `isDAG()`                     - Check if the graph is a directed acyclic graph
+- `transpose()`                 - transpose graph
+- `isConnected()`               - check if undirected graph is connected
+- `removeDirections()`          - Turn a directed graph into an undirected graph
+- `isWeaklyConnected()`         - check if directed graph is weakly connected
+- `isStronglyConnected()`       - check if directed graph is strongly connected
 
 ## How to use
 
