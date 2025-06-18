@@ -112,12 +112,34 @@ def topological_sort_example():
     print(" → ".join(str(node) for node in topo_order))
 
 
+def SCC_example():
+    A = Node("A")
+    B = Node("B")
+    C = Node("C")
+    D = Node("D")
+    E = Node("E")
+
+    graph = GraphDirected([A, B, C, D, E], [
+        (A, B), (B, C), (C, A),  # SCC: A, B, C
+        (B, D),
+        (D, E), (E, D)           # SCC: D, E
+    ])
+
+    print("Graph:")
+    print(graph)
+    print("\nSCCs:")
+    sccs = SCC(graph)
+    for i, scc in enumerate(sccs, 1):
+        print(f"{i}: {[str(n) for n in scc]}")
+
+
 def main():
     examples = {
         1: BFS_example,
         2: DFS_example,
         3: edge_classification_example,
-        4: topological_sort_example
+        4: topological_sort_example,
+        5: SCC_example
     }
     
     while True:
@@ -126,7 +148,8 @@ def main():
             "1 - Graph - BFS" \
             "\n2 - Graph - DFS"\
             "\n3 - Directed Graph - Edge Classification"\
-            "\n4 - Directed Acyclic Graph - Topological Sort"
+            "\n4 - Directed Acyclic Graph - Topological Sort"\
+            "\n5 - Directed Graph - SCC"
         )
         print("TO EXIT WRITE 0")
         key = input("Press key: ")

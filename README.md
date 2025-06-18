@@ -17,6 +17,7 @@ All of these are covered inside `graphAlgorithms.py`
 - Edge Classification
 - `isDAG()`                     - Check if the graph is a directed acyclic graph
 - Topological Sort
+- SCC
 
 ## How to use
 

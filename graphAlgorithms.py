@@ -231,9 +231,57 @@ def topological_sort(graph: GraphDirected) -> list[Node]:
     return result
 
 
-# Strongly Connected Components
-def SCC():
-    return
+# Finds all Strongly Connected Components in a Directed graph
+# Uses Kosaraju’s Algorithm.
+# 1. DFS on original graph
+# 2. Compute transpose of graph
+# 3. DFS_connected on transposed graph in reverse order of finishing times
+# 4. each part is an SCC
+def SCC(graph: GraphDirected) -> list[list[Node]]:
+    result = []
+    color = {}
+    DFS_stack = []
+
+    # 1. Basic DFS on entire graph just to store stack sorted by finishing times
+    for node in graph.nodes():
+        color[node] = "white"
+
+    def DFS_visit(currentNode: Node):
+        color[currentNode] = "gray"
+        for neighbor in graph.getChildren(currentNode):
+            if color[neighbor] ==  "white":
+                DFS_visit(neighbor)
+        color[currentNode] = "black"
+        DFS_stack.append(currentNode)
+
+    for node in graph.nodes():
+        if color[node] == "white":
+            DFS_visit(node)
+
+    # 2 . Transpose of original graph
+    graph_T = transpose(graph)
+    
+    # 3+4 DFS and add to the SCC list
+    for node in graph_T.nodes():
+        color[node] = "white"
+
+    def DFS_connected(node: Node, currentSCC: list[Node]):
+        color[node] = "gray"
+        currentSCC.append(node)
+        for neighbor in graph_T.getChildren(node):
+            if color[neighbor] == "white":
+                DFS_connected(neighbor, currentSCC)
+        color[node] = "black"
+
+    while DFS_stack:
+        node = DFS_stack.pop()
+        if color[node] == "white":
+            currentSCC = []
+            DFS_connected(node, currentSCC)
+            result.append(currentSCC)
+
+    return result
+
 
 def dijkstra():
     return
