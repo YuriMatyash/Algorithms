@@ -1,3 +1,5 @@
+import heapq    # Python's built in min heap module
+
 from structures.node import Node
 from structures.graph import Graph
 from structures.graphDirected import GraphDirected
@@ -283,8 +285,39 @@ def SCC(graph: GraphDirected) -> list[list[Node]]:
     return result
 
 
-def dijkstra():
-    return
+# Dijkstra algorithm
+# Finds the distances of all nodes to a specific node
+# returns dict{Node,tuple(distance,Parent)}
+# where:    distance    -   current Node's distance to starting node
+#           Parent      -   current Node's parent
+def dijkstra(graph: Graph, start: Node) -> dict[Node,tuple[float,Node]]:
+    result = {}
+    for node in graph.nodes():                           # Initialization, each node gets distance from start as inf, father is None
+        result[node] = (float('inf'), None)
+    result[start] =  (0, None)
+    
+    minHeap = [(0, start)]                          # (distance, Node)
+    visited = set()
+
+    while minHeap:      # Goes over all nodes in the graph(which are connected to start)
+        distance, currentNode = heapq.heappop(minHeap)    # current node's distance from start, and father node
+
+        if currentNode in visited:                         # Already visited this node previously
+            continue
+        visited.add(currentNode)
+
+        if distance == float('inf'):                # All remaining nodes are unreachable
+            break  
+
+        for childNode in graph.getChildren(currentNode):            # Go over all the children of the current node
+            weight = graph.weights[currentNode][childNode]          # weight to go from current to child
+            newRoute = distance + weight                            # weight to go from start to child
+            # RELAX function, if the child's distance is larger, update it.
+            if newRoute < result[childNode][0]:                     # if the new weight to go from start to child is smaller than the previously thought weight      
+                result[childNode] = (newRoute, currentNode)         # update the weight
+                heapq.heappush(minHeap, (newRoute, childNode))      # If updated it(we always update atleast once if connected), add to the heap
+
+    return result
 
 def A_star():
     return

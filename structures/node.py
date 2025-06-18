@@ -15,3 +15,9 @@ class Node:
     # Prints the value
     def __str__(self):
         return str(self.value)
+    
+    # solves cases for < when both node's weights are equal when doing Dijkstra's algorithm
+    # if the distances are equal the heap sorts by node, but it can't because it's a Node class
+    # so this overrides the original < operator
+    def __lt__(self, other):
+        return str(self.value) < str(other.value)

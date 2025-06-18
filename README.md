@@ -18,6 +18,7 @@ All of these are covered inside `graphAlgorithms.py`
 - `isDAG()`                     - Check if the graph is a directed acyclic graph
 - Topological Sort
 - SCC
+- Dijkstra
 
 ## How to use
 

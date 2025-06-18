@@ -133,13 +133,56 @@ def SCC_example():
         print(f"{i}: {[str(n) for n in scc]}")
 
 
+def Dijkstra_example():
+    # helper function to show the final paths
+    def reconstruct_path(result, target):
+        path = []
+        current = target
+        while current is not None:
+            path.append(current)
+            current = result[current][1]
+        return list(reversed(path))
+    
+    A = Node("A")
+    B = Node("B")
+    C = Node("C")
+    D = Node("D")
+    E = Node("E")
+
+    graph = GraphDirected(
+        [A, B, C, D, E],
+        [
+            (A, B, 1),
+            (A, C, 4),
+            (B, C, 2),
+            (B, D, 5),
+            (C, D, 1),
+            (D, E, 3)
+        ]
+    )
+    print("Graph:")
+    print(graph)
+    result = dijkstra(graph, A)
+
+    print("\nDijkstra result (from A):")
+    for node, (dist, parent) in result.items():
+        parent_val = parent.value if parent else None
+        print(f"{node}: distance = {dist}, parent = {parent_val}")
+
+    # reconstructs path from A to E
+    target = E
+    path = reconstruct_path(result, target)
+    print(f"\nShortest path from A to {target}: {' -> '.join(str(n) for n in path)}")
+
+
 def main():
     examples = {
         1: BFS_example,
         2: DFS_example,
         3: edge_classification_example,
         4: topological_sort_example,
-        5: SCC_example
+        5: SCC_example,
+        6: Dijkstra_example
     }
     
     while True:
@@ -149,7 +192,8 @@ def main():
             "\n2 - Graph - DFS"\
             "\n3 - Directed Graph - Edge Classification"\
             "\n4 - Directed Acyclic Graph - Topological Sort"\
-            "\n5 - Directed Graph - SCC"
+            "\n5 - Directed Graph - SCC"\
+            "\n6 - Weighted Graph - Dijkstra"
         )
         print("TO EXIT WRITE 0")
         key = input("Press key: ")
