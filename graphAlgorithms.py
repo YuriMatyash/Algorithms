@@ -1,4 +1,5 @@
 import heapq    # Python's built in min heap module
+from typing import Callable     # Allows calling of functions
 
 from structures.node import Node
 from structures.graph import Graph
@@ -326,41 +327,56 @@ def dijkstra(graph: Graph, start: Node) -> dict[Node,tuple[float,Node]]:
 # Then divide that value by either 25 or the highest value of weight, the lower one between the two
 # If it's smaller than 1, divide by 1 instead(so to not increase the heuristic value)
 # tries to Keeps heuristic smaller than actual weights, else A* won't work
-def default_heuristic(current: Node, goal: Node, maxWeight: float) -> float:
+def heuristic_value(current: Node, goal: Node, maxWeight: float = 25) -> float:
     distance = abs(ord(current.value) - ord(goal.value))
     return (distance / max(1.0, min(25.0, maxWeight)))
+
+
+# Standard euclidean with scaling
+def heuristic_euclidean(current: Node, goal: Node, maxWeight: float = 1) -> float:
+    x1, y1 = current.coordinates
+    x2, y2 = goal.coordinates
+    distance = ((x1 - x2)**2 + (y1 - y2)**2) ** 0.5
+    return distance / max(1.0, maxWeight)
+
+
+# Standard manhatan with scaling
+def heuristic_manhattan(current: Node, goal: Node, maxWeight: float = 1) -> float:
+    x1, y1 = current.coordinates
+    x2, y2 = goal.coordinates
+    distance = abs(x1 - x2) + abs(y1 - y2)
+    return distance / max(1.0, maxWeight)
+
+
+# Standard chebyshev
+def heuristic_chebyshev(current: Node, goal: Node, maxWeight: float = 1) -> float:
+    x1, y1 = current.coordinates
+    x2, y2 = goal.coordinates
+    distance = max(abs(x1 - x2), abs(y1 - y2))
+    return distance / max(1.0, maxWeight)
 
 
 # Returns a map of all heuristic values for a graph
 # returns dict{Node1:dict{Node2:distance}}
 # where:    distance    -   current Node's distance to starting node
-# Can then use heuristicMap[A][B] to get the value
-def heuristic_map(graph: Graph, heuristicFunc: default_heuristic) -> dict[Node,dict[Node,float]]:
-    def findMaxWeight(graph: Graph):
-        maxWeight = 0
-        for node1 in graph.weights:
-            for node2 in graph.weights[node1]:
-                if graph.weights[node1][node2] > maxWeight:
-                    maxWeight = graph.weights[node1][node2]
-        return maxWeight
+# Can then use heuristicMap[A] to get the value to the end node
+def heuristic_map(graph: Graph, end: Node, heuristicFunc: Callable[[Node, Node, float], float] = heuristic_value) -> dict[Node,float]:
     heuristicMap = {}
-    maxWeight = findMaxWeight(graph)
+    maxWeight = graph.findMaxWeight()
 
-    nodes = graph.nodes()
-    for a in nodes:
-        heuristicMap[a] = {}
-        for b in nodes:
-            heuristicMap[a][b] = heuristicFunc(a, b, maxWeight)
+    for current in graph.nodes():
+        heuristicMap[current] = heuristicFunc(current, end, maxWeight)
 
     return heuristicMap
 
 
 # A* algorithm
-# WORKS ONLY WHEN VALUES OF NODES ARE ALPHABETICAL, not ascii
+# IF NO HEURISTIC FUNCTION IS PASSED - IT WORKS ONLY WHEN VALUES OF NODES ARE ALPHABETICAL
 # finds the shortest path between two nodes
 # Calculating the heuristic at runtime per edge would be better, I chose not to do that, to keep the code more readable so we just get a complete heuristic map made inside the function
-def A_star(graph: Graph, start: Node, end: Node, heuristicFunc: default_heuristic):
-    heuristicMap = heuristic_map(graph, heuristicFunc)
+# Calculating at runtime is how A* ACTUALLY works, but I care more about readability and changing it to work at runtime isn't that much different
+def A_star(graph: Graph, start: Node, end: Node, heuristicFunc: Callable[[Node, Node, float], float] = heuristic_value):
+    heuristicMap = heuristic_map(graph, end, heuristicFunc)
 
     return  # Need to make heuristic functions
 
