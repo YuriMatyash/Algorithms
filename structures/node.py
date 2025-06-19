@@ -1,6 +1,7 @@
 class Node:
-    def __init__(self, value):
+    def __init__(self, value, coordinates: tuple = (0,0)):
         self.value = value
+        self.coordinates = coordinates
 
     # Lets you compare class objects
     def __eq__(self, other) -> bool:
@@ -10,7 +11,7 @@ class Node:
 
     # allows Node to be a key in a dict
     def __hash__(self):
-        return hash(self.value)
+        return hash(self.value, self.coordinates)
 
     # Prints the value
     def __str__(self):
