@@ -27,6 +27,7 @@ All of these are covered inside `graphAlgorithms.py`
 - A*
 - Bellman-Ford
 - DAG Single-Source Shortest Path
+- DAG Single-Source Longest Path
 ## How to use
 
 - Clone the repository:
