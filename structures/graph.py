@@ -55,6 +55,14 @@ class Graph:
 
         return edges
     
+    def findMaxWeight(self) -> float:
+        maxWeight = 0
+        for node1 in self.weights:
+            for node2 in self.weights[node1]:
+                if self.weights[node1][node2] > maxWeight:
+                    maxWeight = self.weights[node1][node2]
+        return maxWeight
+
     def __str__(self):
         output = ""
         for node in self.adj_list:
