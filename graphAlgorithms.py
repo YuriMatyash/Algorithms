@@ -426,8 +426,37 @@ def A_star(graph: Graph, start: Node, end: Node, heuristicFunc: Callable[[Node, 
 # Bellman Ford algroithm
 # Returns the shortest path to all nodes from a starting node
 def bellman_ford(graph: GraphDirected, start: Node):
+    result = {}             # Node:cost to start
+    father = {}             # Node:father
+    nodes = graph.nodes()
+    edges = graph.edges()
 
-    return
+    for node in nodes:
+        result[node] = float('inf')
+        father[node] = None
+    result[start] = 0
+
+    # RELAX edges repeatedly
+    for _ in range(len(nodes) - 1):
+        for edge in edges:      # edge is (u,v)
+            u = edge[0]
+            v = edge[1]
+            weight = graph.weights[u][v]
+            if (result[u] + weight < result[v]):
+                result[v] = result[u] + weight
+                father[v] = u
+    
+    # Check for negative cycles
+    # Basically do it all over, if you need to update, means there's a negative cycle
+    # You need V-1 iteration at most to finish, if you still update on the Vth iteration -> there's a negative cycle
+    for edge in edges:
+        u = edge[0]
+        v = edge[1]
+        weight = graph.weights[u][v]
+        if (result[u] + weight < result[v]):            # negative cycle 
+            return None                       
+        
+    return result, father
 
 
 def bellman_ford_rec():

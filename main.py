@@ -203,6 +203,41 @@ def A_star_example():
         print("No path found from A to E.")
 
 
+def bellman_ford_example():
+    A = Node("A", (0, 0))
+    B = Node("B", (1, 0))
+    C = Node("C", (2, 0))
+    D = Node("D", (1, 1))
+    graph = GraphDirected([A, B, C, D])
+    graph.addEdge((A, B), 1)
+    graph.addEdge((B, C), 3)
+    graph.addEdge((A, D), 4)
+    graph.addEdge((D, C), -2)  # Negative weight, still no negative cycle
+
+    print("Graph:")
+    print(graph)
+
+    print("\nRunning Bellman-Ford from A...\n")
+    result = bellman_ford(graph, A)
+
+    if result is None:
+        print("Negative weight cycle detected. Aborting.")
+    else:
+        distances, parents = result
+        print("Shortest distances from A:")
+        for node in graph.nodes():
+            print(f"  {node}: {distances[node]}")
+        print("\nPaths (via parents):")
+        for node in graph.nodes():
+            path = []
+            current = node
+            while current is not None:
+                path.append(current)
+                current = parents[current]
+            path.reverse()
+            print(f"  {node}: {' → '.join(str(n) for n in path)}")
+
+
 def main():
     examples = {
         1: BFS_example,
@@ -211,7 +246,8 @@ def main():
         4: topological_sort_example,
         5: SCC_example,
         6: Dijkstra_example,
-        7: A_star_example
+        7: A_star_example,
+        8: bellman_ford_example
     }
     
     while True:
@@ -223,7 +259,8 @@ def main():
             "\n4 - Directed Acyclic Graph - Topological Sort"\
             "\n5 - Directed Graph - SCC"\
             "\n6 - Positive Weighted Graph - Dijkstra"\
-            "\n7 - Positive Weighted Graph - A*"
+            "\n7 - Positive Weighted Graph - A*"\
+            "\n8 - Directed Weighted Graph - Bellman-ford"
         )
         print("TO EXIT WRITE 0")
         key = input("Press key: ")
