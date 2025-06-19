@@ -360,7 +360,7 @@ def heuristic_chebyshev(current: Node, goal: Node, maxWeight: float = 1) -> floa
 # returns dict{Node1:dict{Node2:distance}}
 # where:    distance    -   current Node's distance to starting node
 # Can then use heuristicMap[A] to get the value to the end node
-def heuristic_map(graph: Graph, end: Node, heuristicFunc: Callable[[Node, Node, float], float] = heuristic_value) -> dict[Node,float]:
+def heuristic_map(graph: Graph, end: Node, heuristicFunc: Callable[[Node, Node, float], float] = heuristic_euclidean) -> dict[Node,float]:
     heuristicMap = {}
     maxWeight = graph.findMaxWeight()
 
@@ -375,10 +375,52 @@ def heuristic_map(graph: Graph, end: Node, heuristicFunc: Callable[[Node, Node, 
 # finds the shortest path between two nodes
 # Calculating the heuristic at runtime per edge would be better, I chose not to do that, to keep the code more readable so we just get a complete heuristic map made inside the function
 # Calculating at runtime is how A* ACTUALLY works, but I care more about readability and changing it to work at runtime isn't that much different
-def A_star(graph: Graph, start: Node, end: Node, heuristicFunc: Callable[[Node, Node, float], float] = heuristic_value):
+# The algorithm is remade through the pseudocode we were presented in class, with some slight modifications
+def A_star(graph: Graph, start: Node, end: Node, heuristicFunc: Callable[[Node, Node, float], float] = heuristic_euclidean):
     heuristicMap = heuristic_map(graph, end, heuristicFunc)
+    nodes = graph.nodes()
+    costFromStart = {}              # Actual shortest cost from the start to a given node
+    father = {}                     # Current node's father according to A*, used for backtracking
+    costEstimateToGoal = {}         # Estimated total cost from start to goal through a node
 
-    return  # Need to make heuristic functions
+    for node in nodes:
+        costFromStart[node] = float('inf')
+        costEstimateToGoal[node] = float('inf')
+        father[node] = None
+    costFromStart[start] = 0
+    costEstimateToGoal[start] = heuristicMap[start]
+    father[start] = None
+
+    Queue = []              # Current possible nodes to visit
+    heapq.heappush(Queue, (costEstimateToGoal[start], start))   
+    visited = set()         # Nodes already visited
+
+    while Queue:
+        _, current = heapq.heappop(Queue)   # costEestimateToGoal, node
+        visited.add(current)
+
+        # finished, go over the fathers and return the shortest path + it's weight
+        if current == end:
+            path = []
+            while current:                  # fills path from end to start
+                path.append(current)
+                current = father[current]
+            return (list(reversed(path)), costFromStart[end])
+        
+        for neighbor in graph.getChildren(current):
+            # Node was already previouly visited
+            if neighbor in visited:
+                continue
+
+            cost = costFromStart[current] + graph.weights[current][neighbor]
+            if cost < costFromStart[neighbor]:
+                costFromStart[neighbor] = cost
+                father[neighbor] = current
+                costEstimateToGoal[neighbor] = cost + heuristicMap[neighbor]
+
+            heapq.heappush(Queue, (costEstimateToGoal[neighbor], neighbor))
+
+    return (None, float('inf'))                 # Failed to reach end Node from start Node
 
 
 def bellman_ford():

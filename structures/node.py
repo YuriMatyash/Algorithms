@@ -11,7 +11,7 @@ class Node:
 
     # allows Node to be a key in a dict
     def __hash__(self):
-        return hash(self.value, self.coordinates)
+        return hash((self.value, self.coordinates))
 
     # Prints the value
     def __str__(self):

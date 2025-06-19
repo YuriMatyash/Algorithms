@@ -175,6 +175,34 @@ def Dijkstra_example():
     print(f"\nShortest path from A to {target}: {' -> '.join(str(n) for n in path)}")
 
 
+def A_star_example():
+    A = Node("A", (0, 0))
+    B = Node("B", (1, 0))
+    C = Node("C", (2, 0))
+    D = Node("D", (1, 1))
+    E = Node("E", (2, 1))
+
+    graph = GraphDirected([A, B, C, D, E])
+    graph.addEdge((A, B), weight=1)
+    graph.addEdge((B, C), weight=1)
+    graph.addEdge((C, E), weight=1)
+    graph.addEdge((A, D), weight=2)
+    graph.addEdge((D, E), weight=2)
+
+    print("Graph:")
+    print(graph)
+    print("\nRunning A* from A to E...\n")
+
+    path, cost = A_star(graph, A, E)
+
+    if path:
+        print("Shortest Path Found:")
+        print(" → ".join(str(node) for node in path))
+        print(f"Total Cost: {cost}")
+    else:
+        print("No path found from A to E.")
+
+
 def main():
     examples = {
         1: BFS_example,
@@ -182,7 +210,8 @@ def main():
         3: edge_classification_example,
         4: topological_sort_example,
         5: SCC_example,
-        6: Dijkstra_example
+        6: Dijkstra_example,
+        7: A_star_example
     }
     
     while True:
@@ -193,7 +222,8 @@ def main():
             "\n3 - Directed Graph - Edge Classification"\
             "\n4 - Directed Acyclic Graph - Topological Sort"\
             "\n5 - Directed Graph - SCC"\
-            "\n6 - Weighted Graph - Dijkstra"
+            "\n6 - Positive Weighted Graph - Dijkstra"\
+            "\n7 - Positive Weighted Graph - A*"
         )
         print("TO EXIT WRITE 0")
         key = input("Press key: ")
