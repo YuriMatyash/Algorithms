@@ -25,6 +25,7 @@ All of these are covered inside `graphAlgorithms.py`
 - `heuristic_chebyshev`         - Calculate heuristic using chebyshev
 - `heuristic_map`               - Creates a heuristic map for a weighted graph
 - A*
+- Bellman-Ford
 ## How to use
 
 - Clone the repository:
