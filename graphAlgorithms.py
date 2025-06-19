@@ -326,7 +326,7 @@ def dijkstra(graph: Graph, start: Node) -> dict[Node,tuple[float,Node]]:
 # Then divide that value by either 25 or the highest value of weight, the lower one between the two
 # If it's smaller than 1, divide by 1 instead(so to not increase the heuristic value)
 # tries to Keeps heuristic smaller than actual weights, else A* won't work
-def default_heuristic(current: Node, goal: Node, maxWeight: float = 25.0) -> float:
+def default_heuristic(current: Node, goal: Node, maxWeight: float) -> float:
     distance = abs(ord(current.value) - ord(goal.value))
     return (distance / max(1.0, min(25.0, maxWeight)))
 
@@ -336,20 +336,21 @@ def default_heuristic(current: Node, goal: Node, maxWeight: float = 25.0) -> flo
 # where:    distance    -   current Node's distance to starting node
 # Can then use heuristicMap[A][B] to get the value
 def heuristic_map(graph: Graph, heuristicFunc: default_heuristic) -> dict[Node,dict[Node,float]]:
-    heuristicMap = {}
-    maxWeight = 0
     def findMaxWeight(graph: Graph):
+        maxWeight = 0
         for node1 in graph.weights:
             for node2 in graph.weights[node1]:
                 if graph.weights[node1][node2] > maxWeight:
                     maxWeight = graph.weights[node1][node2]
-
+        return maxWeight
+    heuristicMap = {}
+    maxWeight = findMaxWeight(graph)
 
     nodes = graph.nodes()
     for a in nodes:
         heuristicMap[a] = {}
         for b in nodes:
-            heuristicMap[a][b] = heuristicFunc(a, b)
+            heuristicMap[a][b] = heuristicFunc(a, b, maxWeight)
 
     return heuristicMap
 
