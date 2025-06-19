@@ -26,6 +26,7 @@ All of these are covered inside `graphAlgorithms.py`
 - `heuristic_map`               - Creates a heuristic map for a weighted graph
 - A*
 - Bellman-Ford
+- DAG Single-Source Shortest Path
 ## How to use
 
 - Clone the repository:

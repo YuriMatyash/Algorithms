@@ -238,6 +238,49 @@ def bellman_ford_example():
             print(f"  {node}: {' → '.join(str(n) for n in path)}")
 
 
+def DAG_shortest_example():
+    A = Node("A")
+    B = Node("B")
+    C = Node("C")
+    D = Node("D")
+    E = Node("E")
+
+    graph = GraphDirected([A, B, C, D, E], [
+        (A, B, 3),
+        (A, C, 6),
+        (B, C, 4),
+        (B, D, 4),
+        (C, D, 8),
+        (C, E, 11),
+        (D, E, -4)
+    ])
+
+    print("Graph:")
+    print(graph)
+    print("\nRunning DAG Shortest Paths from A...\n")
+
+    result = DAG_shortest(graph, A)
+
+    if result is None:
+        print("The graph is not a DAG.")
+        return
+
+    distances, parents = result
+
+    print("Shortest distances from A:")
+    for node, dist in distances.items():
+        print(f"  {node}: {dist}")
+
+    print("\nPaths (via parents):")
+    for node in graph.nodes():
+        path = []
+        current = node
+        while current:
+            path.append(current)
+            current = parents[current]
+        print(f"  {node}: {' → '.join(str(n) for n in reversed(path))}")
+
+
 def main():
     examples = {
         1: BFS_example,
@@ -247,7 +290,8 @@ def main():
         5: SCC_example,
         6: Dijkstra_example,
         7: A_star_example,
-        8: bellman_ford_example
+        8: bellman_ford_example,
+        9: DAG_shortest_example
     }
     
     while True:
@@ -260,7 +304,8 @@ def main():
             "\n5 - Directed Graph - SCC"\
             "\n6 - Positive Weighted Graph - Dijkstra"\
             "\n7 - Positive Weighted Graph - A*"\
-            "\n8 - Directed Weighted Graph - Bellman-ford"
+            "\n8 - Directed Weighted Graph - Bellman-ford"\
+            "\n9 - Acyclic Directed Weighted Graph - DAG Single-Source Shortest Path"
         )
         print("TO EXIT WRITE 0")
         key = input("Press key: ")

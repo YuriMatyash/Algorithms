@@ -425,7 +425,7 @@ def A_star(graph: Graph, start: Node, end: Node, heuristicFunc: Callable[[Node, 
 
 # Bellman Ford algroithm
 # Returns the shortest path to all nodes from a starting node
-def bellman_ford(graph: GraphDirected, start: Node):
+def bellman_ford(graph: GraphDirected, start: Node) -> tuple[dict[Node,float],dict[Node,Node]]:
     result = {}             # Node:cost to start
     father = {}             # Node:father
     nodes = graph.nodes()
@@ -462,8 +462,36 @@ def bellman_ford(graph: GraphDirected, start: Node):
 def bellman_ford_rec():
     return
 
-def DAG_shortest():
-    return
+# DAG-Shortest Paths
+# An algorithm that is used to return all the shortest path from a single node to all other nodes
+# Only works on a weighted acyclic directed graph 
+def DAG_shortest(graph: GraphDirected, start: Node) -> tuple[dict[Node,float],dict[Node,Node]]:
+    if not isDAG(graph):            # Not acyclic
+        return None
+    
+    result = {}
+    father = {}
+    nodes = graph.nodes()
+    edges = graph.edges()
+    topoSorted = topological_sort(graph)
+
+    # They call it: INITIALIZE-SINGLE-SOURCE(G,s)
+    # They put these 4 lines in a function....
+    for node in nodes:
+        result[node] = float('inf')
+        father[node] = None
+    result[start] = 0
+
+    # RELAX
+    for node in topoSorted:
+        for neighbor in graph.getChildren(node):
+            weight = graph.weights[node][neighbor]
+            if result[neighbor] > result[node] + weight:
+                result[neighbor] = result[node] + weight
+                father[neighbor] = node
+
+    return  result, father
+
 
 def DAG_longest():
     return
