@@ -463,7 +463,7 @@ def bellman_ford_rec():
     return
 
 # DAG-Shortest Paths
-# An algorithm that is used to return all the shortest path from a single node to all other nodes
+# An algorithm that is used to return all the shortest paths from a single node to all other nodes
 # Only works on a weighted acyclic directed graph 
 def DAG_shortest(graph: GraphDirected, start: Node) -> tuple[dict[Node,float],dict[Node,Node]]:
     if not isDAG(graph):            # Not acyclic
@@ -493,8 +493,33 @@ def DAG_shortest(graph: GraphDirected, start: Node) -> tuple[dict[Node,float],di
     return  result, father
 
 
-def DAG_longest():
-    return
+# DAG-Longest Paths
+# An algorithm that is used to return all the longest paths from a single node to all other nodes
+# Only works on a weighted acyclic directed graph 
+def DAG_longest(graph: GraphDirected, start: Node) -> tuple[dict[Node,float],dict[Node,Node]]:
+    if not isDAG(graph):            # Not acyclic
+        return None
+    
+    result = {}
+    father = {}
+    nodes = graph.nodes()
+    edges = graph.edges()
+    topoSorted = topological_sort(graph)
+
+    for node in nodes:
+        result[node] = -float('inf')
+        father[node] = None
+    result[start] = 0
+
+    # RELAX
+    for node in topoSorted:
+        for neighbor in graph.getChildren(node):
+            weight = graph.weights[node][neighbor]
+            if result[neighbor] < result[node] + weight:
+                result[neighbor] = result[node] + weight
+                father[neighbor] = node
+
+    return result, father
 
 # Critical Path Method
 def CPM():
