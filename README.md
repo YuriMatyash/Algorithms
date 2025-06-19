@@ -19,7 +19,8 @@ All of these are covered inside `graphAlgorithms.py`
 - Topological Sort
 - SCC
 - Dijkstra
-
+- `default_heuristic`           - Calculate heuristic by alphabetical distance and normalization by max weight of graph
+- `heuristic_map`               - Creates a heuristic map for a weighted graph
 ## How to use
 
 - Clone the repository:
