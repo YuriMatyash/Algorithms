@@ -459,9 +459,6 @@ def bellman_ford(graph: GraphDirected, start: Node) -> tuple[dict[Node,float],di
     return result, father
 
 
-def bellman_ford_rec():
-    return
-
 # DAG-Shortest Paths
 # An algorithm that is used to return all the shortest paths from a single node to all other nodes
 # Only works on a weighted acyclic directed graph 
