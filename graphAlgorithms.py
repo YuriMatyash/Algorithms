@@ -376,7 +376,7 @@ def heuristic_map(graph: Graph, end: Node, heuristicFunc: Callable[[Node, Node, 
 # Calculating the heuristic at runtime per edge would be better, I chose not to do that, to keep the code more readable so we just get a complete heuristic map made inside the function
 # Calculating at runtime is how A* ACTUALLY works, but I care more about readability and changing it to work at runtime isn't that much different
 # The algorithm is remade through the pseudocode we were presented in class, with some slight modifications
-def A_star(graph: Graph, start: Node, end: Node, heuristicFunc: Callable[[Node, Node, float], float] = heuristic_euclidean):
+def A_star(graph: Graph, start: Node, end: Node, heuristicFunc: Callable[[Node, Node, float], float] = heuristic_euclidean) -> tuple[list[Node], float]:
     heuristicMap = heuristic_map(graph, end, heuristicFunc)
     nodes = graph.nodes()
     costFromStart = {}              # Actual shortest cost from the start to a given node
@@ -423,7 +423,10 @@ def A_star(graph: Graph, start: Node, end: Node, heuristicFunc: Callable[[Node, 
     return (None, float('inf'))                 # Failed to reach end Node from start Node
 
 
-def bellman_ford():
+# Bellman Ford algroithm
+# Returns the shortest path to all nodes from a starting node
+def bellman_ford(graph: GraphDirected, start: Node):
+
     return
 
 
