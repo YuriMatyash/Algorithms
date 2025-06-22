@@ -28,6 +28,10 @@ class Graph:
             if node in neighborsList:
                 neighborsList.pop(node)
 
+    def clone(self):
+        # Implimented in GraphDirected and GraphUndirected
+        return
+
     def setWeight(self, left: Node, right: Node, weight: float) -> None:
         # Implimented in GraphDirected and GraphUndirected
         return

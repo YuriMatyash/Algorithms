@@ -16,13 +16,6 @@ class GraphUndirected(Graph):
         self.weights[A][B] = weight
         self.weights[B][A] = weight
 
-    def setWeight(self, edge: tuple[Node, Node], weight: float = 0) -> None:
-        self.weights[edge[0]][edge[1]] = weight
-        self.weights[edge[1]][edge[0]] = weight
-
-    def getWeight(self, left: Node, right: Node) -> float:
-        return self.weights.get(left, {}).get(right, 0.0)
-
     def removeEdge(self, edge: tuple[Node, Node]) -> None:
         A,B = edge
 
@@ -36,3 +29,37 @@ class GraphUndirected(Graph):
         if A in self.adj_list[B]:                   # remove A node from B node's neighbor's list
             self.adj_list[B].remove(A)
             self.weights[B].pop(A)
+
+    def clone(self):
+        newGraph = GraphUndirected()
+        nodeMap = {}
+
+        nodes = self.nodes()
+        edges = self.edges()
+
+        for node in nodes:
+            newNode = Node(node.value)
+            nodeMap[node] = newNode
+            newGraph.addNode(newNode)
+        
+        for edge in edges:
+            left_o, right_o = edge
+
+            left = nodeMap[left_o]
+            right = nodeMap[right_o]
+
+            weight = self.getWeight(left_o, right_o)
+
+            newGraph.addEdge((left,right), weight=weight)
+
+        return newGraph
+
+    # Weight stuff
+    ###############
+    def setWeight(self, edge: tuple[Node, Node], weight: float = 0) -> None:
+        self.weights[edge[0]][edge[1]] = weight
+        self.weights[edge[1]][edge[0]] = weight
+
+    def getWeight(self, left: Node, right: Node) -> float:
+        return self.weights.get(left, {}).get(right, 0.0)
+

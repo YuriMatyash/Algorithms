@@ -20,9 +20,15 @@ def transpose(graph: GraphDirected) -> GraphDirected:
         newGraph.addNode(newNode)
     
     for edge in edges:
-        left = nodeMap[edge[0]]
-        right = nodeMap[edge[1]]
-        newGraph.addEdge((right,left), weight=graph.weights[edge[0]][edge[1]])      # flips them, that's the whole point of the transpose
+        left_o, right_o = edge
+
+        left = nodeMap[left_o]
+        right = nodeMap[right_o]
+
+        weight = graph.getWeight(left_o, right_o)
+        flow = graph.getFlow((left_o, right_o))
+
+        newGraph.addEdge((right,left), weight=weight, flow=flow)      # flips them, that's the whole point of the transpose
 
     return newGraph
 

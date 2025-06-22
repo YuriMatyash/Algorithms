@@ -37,6 +37,31 @@ class GraphDirected(Graph):
             self.adj_list[source].remove(goal)
             self.weights[source].pop(goal)
 
+    def clone(self):
+        newGraph = GraphDirected()
+        nodeMap = {}
+
+        nodes = self.nodes()
+        edges = self.edges()
+
+        for node in nodes:
+            newNode = Node(node.value)
+            nodeMap[node] = newNode
+            newGraph.addNode(newNode)
+        
+        for edge in edges:
+            left_o, right_o = edge
+
+            left = nodeMap[left_o]
+            right = nodeMap[right_o]
+
+            weight = self.getWeight(left_o, right_o)
+            flow = self.getFlow((left_o, right_o))
+
+            newGraph.addEdge((left,right), weight=weight, flow= flow)
+
+        return newGraph
+
     # Weight stuff
     ##############
     def setWeight(self, edge: tuple[Node, Node], weight: float = 0) -> None:
