@@ -628,7 +628,7 @@ def floyd_warshall(graph: Graph) -> dict[Node, dict[Node, float]]:
     return result
 
 
-
+# Ford fulkerson algorithm
 def ford_fulkerson():
     return
 
