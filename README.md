@@ -30,6 +30,7 @@ All of these are covered inside `graphAlgorithms.py`
 - DAG Single-Source Longest Path
 - `starting_nodes`              - Find all nodes without a parent(Roots, starting nodes...)
 - CPM
+- Floyd Warshall
 
 
 ## How to use

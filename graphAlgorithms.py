@@ -425,6 +425,7 @@ def A_star(graph: Graph, start: Node, end: Node, heuristicFunc: Callable[[Node, 
 
 # Bellman Ford algroithm
 # Returns the shortest path to all nodes from a starting node
+# Works on Negative graphs! :)
 def bellman_ford(graph: GraphDirected, start: Node) -> tuple[dict[Node,float],dict[Node,Node]]:
     result = {}             # Node:cost to start
     father = {}             # Node:father
@@ -579,8 +580,48 @@ def CPM(graph: Graph) -> tuple[dict[Node,float],dict[Node,Node]]:
 
     return  finish, father
 
-def floyd_warshall():
-    return
+
+# Floyd Warshall algorithm
+# Works for weights, directed graphs with negative weights
+# Finds all shortest paths for every pair of nodes
+# impressive stuff
+def floyd_warshall(graph: Graph) -> dict[Node, dict[Node, float]]:
+    result = {}
+    nodes = graph.nodes()
+
+    # initialize first keys
+    for node in nodes:
+        result[node] = {}
+
+    # initialize complete result dict
+    for node1 in nodes:
+        for node2 in nodes:
+            if node1 == node2:  
+                result[node1][node2] = 0
+            elif node2 in graph.getChildren(node1):
+                result[node1][node2] = graph.weights[node1][node2]
+            else:
+                result[node1][node2] = float('inf')
+
+    # main triple loop
+    for k in nodes:
+        for i in nodes:
+            for j in nodes:
+                if result[i][j] > result[i][k] + result[k][j]:
+                    result[i][j] = result[i][k] + result[k][j]
+
+    # How to find negative cycles once algorithm finishes
+    '''    
+    for k in nodes:
+        for i in nodes:
+            for j in nodes:
+                if result[node][node] < 0:
+                    # Negative cycle is present
+    '''
+
+    return result
+
+
 
 def ford_fulkerson():
     return

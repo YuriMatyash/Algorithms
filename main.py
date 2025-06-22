@@ -354,6 +354,38 @@ def CPM_example():
     print(" -> ".join(node.value for node in critical_path))
 
 
+def floyd_warshall_example():
+    graph = GraphDirected()
+
+    A = Node('A')
+    B = Node('B')
+    C = Node('C')
+    D = Node('D')
+
+    # Add nodes to the graph
+    for node in [A, B, C, D]:
+        graph.addNode(node)
+
+    # Add weighted edges
+    graph.addEdge((A, B), 3)
+    graph.addEdge((A, C), 8)
+    graph.addEdge((B, C), -2)
+    graph.addEdge((C, D), 1)
+    graph.addEdge((D, A), 4)
+
+    # Run Floyd-Warshall
+    distances = floyd_warshall(graph)
+
+    # Print result
+    print("Shortest distances between all pairs of nodes:\n")
+    for i in distances:
+        for j in distances[i]:
+            dist = distances[i][j]
+            val = f"{dist:.1f}" if dist != float('inf') else "inf"
+            print(f"{i.value} → {j.value}: {val}")
+        print()
+
+
 def main():
     examples = {
         1: BFS_example,
@@ -366,7 +398,8 @@ def main():
         8: bellman_ford_example,
         9: DAG_shortest_example,
         10: DAG_longest_example,
-        11: CPM_example
+        11: CPM_example,
+        12: floyd_warshall_example
     }
     
     while True:
@@ -382,7 +415,8 @@ def main():
             "\n8 - Directed Weighted Graph - Bellman-Ford"\
             "\n9 - Acyclic Directed Weighted Graph - DAG Single-Source Shortest Path"\
             "\n10 - Acyclic Directed Weighted Graph - DAG Single-Source Longest Path"\
-            "\n11 - Acyclic Directed Weighted Graph - CPM"
+            "\n11 - Acyclic Directed Weighted Graph - CPM"\
+            "\n12 - Directed Weighed Graph - Floyd Warshall"
         )
         print("TO EXIT WRITE 0")
         key = input("Press key: ")
