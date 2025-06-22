@@ -518,9 +518,66 @@ def DAG_longest(graph: GraphDirected, start: Node) -> tuple[dict[Node,float],dic
 
     return result, father
 
+
+# Returns a list of nodes which no one points to(start nodes)
+# Used by CPM
+def starting_nodes(graph: Graph) -> list[Node]:
+    pointedToCount = {}
+    startNodes = []
+    nodes = graph.nodes()
+
+    for node in nodes:
+        pointedToCount[node] = 0
+    
+    # Count how many times each node is a child of another node
+    for node in nodes:
+        children = graph.getChildren(node)
+        for neighbor in children:
+            pointedToCount[neighbor] += 1
+    
+    # if a node is never a child -> it's a starting node
+    for key in pointedToCount:
+        if pointedToCount[key] == 0:
+            startNodes.append(key)
+
+    return startNodes
+
+
 # Critical Path Method
-def CPM():
-    return
+# Finds the longest path from start to finish based on weights that represent task times to finish
+# It's basically a fancier and more global version of the DAG longest path method
+def CPM(graph: Graph) -> tuple[dict[Node,float],dict[Node,Node]]:
+    if not isDAG(graph):            # Not acyclic
+        return None
+    
+    finish = {}             # longest finish time for each node
+    father = {}             # parent of finished node
+
+    startingNodes = starting_nodes(graph)   
+
+    # Add an artifical Node with edges of weight 0 to all starting nodes
+    artificalNode = Node('ArtificalNode')
+    graph.addNode(artificalNode)
+    for node in startingNodes:
+        graph.addEdge((artificalNode, node), 0)
+
+    nodes = graph.nodes()
+    edges = graph.edges()
+    topoSorted = topological_sort(graph)
+
+    for node in nodes:
+        finish[node] = 0
+        father[node] = None
+
+    # RELAX
+    for node in topoSorted:
+        for neighbor in graph.getChildren(node):
+            weight = graph.weights[node][neighbor]
+            if finish[neighbor] < finish[node] + weight:
+                finish[neighbor] = finish[node] + weight
+                father[neighbor] = node
+
+    return  finish, father
 
 def floyd_warshall():
     return

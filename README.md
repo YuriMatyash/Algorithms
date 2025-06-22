@@ -28,6 +28,10 @@ All of these are covered inside `graphAlgorithms.py`
 - Bellman-Ford
 - DAG Single-Source Shortest Path
 - DAG Single-Source Longest Path
+- `starting_nodes`              - Find all nodes without a parent(Roots, starting nodes...)
+- CPM
+
+
 ## How to use
 
 - Clone the repository:

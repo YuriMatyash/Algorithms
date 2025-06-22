@@ -318,6 +318,42 @@ def DAG_longest_example():
         print(f"  {node}: {' → '.join(str(n) for n in path)}")
 
 
+def CPM_example():
+    graph = GraphDirected()
+    A = Node('A')
+    B = Node('B')
+    C = Node('C')
+    D = Node('D')
+
+    graph.addNode(A)
+    graph.addNode(B)
+    graph.addNode(C)
+    graph.addNode(D)
+
+    graph.addEdge((A, B), 3)
+    graph.addEdge((A, C), 2)
+    graph.addEdge((B, D), 4)
+    graph.addEdge((C, D), 1)
+
+    finish_times, father = CPM(graph)
+
+    print("Longest Finish Times:")
+    for node in finish_times:
+        print(f"{node.value}: {finish_times[node]}")
+
+    critical_end = max(finish_times, key=finish_times.get)
+    critical_path = []
+
+    while critical_end is not None:
+        critical_path.append(critical_end)
+        critical_end = father[critical_end]
+
+    critical_path = critical_path[::-1]
+
+    print("\nCritical Path:")
+    print(" -> ".join(node.value for node in critical_path))
+
+
 def main():
     examples = {
         1: BFS_example,
@@ -329,7 +365,8 @@ def main():
         7: A_star_example,
         8: bellman_ford_example,
         9: DAG_shortest_example,
-        10: DAG_longest_example
+        10: DAG_longest_example,
+        11: CPM_example
     }
     
     while True:
@@ -344,7 +381,8 @@ def main():
             "\n7 - Positive Weighted Graph - A*"\
             "\n8 - Directed Weighted Graph - Bellman-Ford"\
             "\n9 - Acyclic Directed Weighted Graph - DAG Single-Source Shortest Path"\
-            "\n10 - Acyclic Directed Weighted Graph - DAG Single-Source Longest Path"
+            "\n10 - Acyclic Directed Weighted Graph - DAG Single-Source Longest Path"\
+            "\n11 - Acyclic Directed Weighted Graph - CPM"
         )
         print("TO EXIT WRITE 0")
         key = input("Press key: ")
