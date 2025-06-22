@@ -20,6 +20,9 @@ class GraphUndirected(Graph):
         self.weights[edge[0]][edge[1]] = weight
         self.weights[edge[1]][edge[0]] = weight
 
+    def getWeight(self, left: Node, right: Node) -> float:
+        return self.weights.get(left, {}).get(right, 0.0)
+
     def removeEdge(self, edge: tuple[Node, Node]) -> None:
         A,B = edge
 

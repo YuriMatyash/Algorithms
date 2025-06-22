@@ -31,6 +31,10 @@ class Graph:
     def setWeight(self, left: Node, right: Node, weight: float) -> None:
         # Implimented in GraphDirected and GraphUndirected
         return
+    
+    def getWeight(self, left: Node, right: Node, weight: float) -> None:
+        # Implimented in GraphDirected and GraphUndirected
+        return
 
     def addEdge(self, edge: tuple[Node, Node]) -> None:
         # Implimented in GraphDirected and GraphUndirected

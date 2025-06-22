@@ -2,7 +2,11 @@ from .graph import Graph
 from .node import Node
 
 class GraphDirected(Graph):
-    def addEdge(self, edge: tuple[Node, Node], weight: float = 0) -> None:
+    def __init__(self, V: list[Node] = [], E: list[tuple] = []):
+        super().__init__(V, E)
+        self.flow = {}                                      #   dict{Node: dict{Node:Weight}}       <- allows access like self.flow[A][B] == flow from A to B
+
+    def addEdge(self, edge: tuple[Node, Node], weight: float = 0, flow: float = 0) -> None:
         source, goal = edge
 
         if source not in self.adj_list.keys():              # Source node is not in the graph
@@ -10,14 +14,19 @@ class GraphDirected(Graph):
         if goal not in self.adj_list.keys():                # Goal node is not in the graph, prevent linking non-existant node
             return
         
+        if source not in self.flow:
+            self.flow[source] = {}
+        if goal not in self.flow:
+            self.flow[goal] = {}
+        if goal not in self.flow[source]:
+            self.flow[source][goal] = flow
+            self.flow[goal][source] = 0                     # flow reversal support
+
         if goal not in self.adj_list[source]:               # add goal node to source node's neighbor's list + update weight
             self.adj_list[source].append(goal)
             self.weights[source][goal] = weight
         else:                                               # Edge already exists, just update the weight
             self.weights[source][goal] = weight
-
-    def setWeight(self, edge: tuple[Node, Node], weight: float = 0) -> None:
-        self.weights[edge[0]][edge[1]] = weight
 
     def removeEdge(self, edge: tuple[Node, Node]) -> None:
         source, goal = edge
@@ -27,3 +36,30 @@ class GraphDirected(Graph):
         if goal in self.adj_list[source]:                   # remove goal node from source node's neighbor's list
             self.adj_list[source].remove(goal)
             self.weights[source].pop(goal)
+
+    # Weight stuff
+    ##############
+    def setWeight(self, edge: tuple[Node, Node], weight: float = 0) -> None:
+        self.weights[edge[0]][edge[1]] = weight
+
+    def getWeight(self, left: Node, right: Node) -> float:
+        return self.weights.get(left, {}).get(right, 0.0)
+
+    # Flow stuff
+    ##############
+    def setFlow(self, edge: tuple[Node, Node], flow: float = 0) -> None:
+        if edge not in self.edges():
+            return
+
+        if flow <= self.weights[edge[0]][edge[1]]:
+            self.flow[edge[0]][edge[1]] = flow
+
+    def getFlow(self, edge: tuple[Node, Node]) -> float:
+        left, right = edge
+        return self.flow.get(left, {}).get(right, 0.0)
+
+    # returns how much more flow can be added
+    def getResidualCapacity(self, source: Node, target: Node) -> float:
+        capacity = self.weights.get(source, {}).get(target, 0.0)
+        used = self.flow.get(source, {}).get(target, 0.0)
+        return capacity - used
