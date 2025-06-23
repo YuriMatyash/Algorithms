@@ -32,8 +32,8 @@ All of these are covered inside `graphAlgorithms.py`
 - CPM
 - Floyd Warshall
 - `isSaturated`                 - Check if edge is saturated(flow is equal to capacity)
-- `getResidualCapacity`         - returns the remaining residual flow allowance
 - `findPath`                    - uses BFS to find a path from two nodes, returns a list of edges(the path itself)
+- `BFS_flow`                    - Remade BFS that doesn't traverse edges with flow of 0(for ford fulkerson)
 - ford_fulkerson
 
 

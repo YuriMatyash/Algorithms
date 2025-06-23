@@ -635,18 +635,13 @@ def isSaturated(graph: GraphDirected, edge: tuple[Node, Node]) -> bool:
     return False
 
 
-# Simple helper function to get the remaining residual capacity
-def getResidualCapacity(graph: GraphDirected, edge:tuple[Node, Node]) -> int:
-    return graph.getWeight(edge) - graph.getFlow(edge)
-
-
 # Helper function to see if there's a parth between two nodes
 # Returns a list of all edges used to reach the goal
 # Can also extract the Nodes used by simply taking the first Node in each edge throughout the list
-def findPath(graph: GraphDirected, start:Node, target:Node):
+def findPath(graph: GraphDirected, start:Node, target:Node) -> list[tuple[Node,Node]]:
     result = []
     currNode = target
-    BFSresult = BFS(graph, start)
+    BFSresult = BFS_flow(graph, start)
 
     if BFSresult[target][1] == None:                # No path found
         return None
@@ -659,8 +654,39 @@ def findPath(graph: GraphDirected, start:Node, target:Node):
     result.reverse()
     return result
 
+
+# A BFS that takes into account flow, used for ford fulkerson
+def BFS_flow(graph: GraphDirected, start: Node) -> dict[Node, list]:
+    result  = {}
+    queue   = []
+    visited = set()
+
+    for node in graph.nodes():
+        result[node] = [float('inf'), None]
+
+    result[start][0] = 0
+    queue.append(start)
+    visited.add(start)
+
+    while queue:
+        currentNode = queue.pop(0)
+        for neighbor in graph.getChildren(currentNode):
+
+            # skip saturated edges
+            if graph.getResidualCapacity((currentNode, neighbor)) <= 0:
+                continue
+
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+                result[neighbor][0] = result[currentNode][0] + 1
+                result[neighbor][1] = currentNode
+
+    return result
+
+
 # Ford fulkerson algorithm
-def ford_fulkerson(graph: GraphDirected, start: Node, target: Node):
+def ford_fulkerson(graph: GraphDirected, start: Node, target: Node) -> float:
     residualGraph = graph.clone()
 
     for edge in residualGraph.edges():
@@ -678,7 +704,7 @@ def ford_fulkerson(graph: GraphDirected, start: Node, target: Node):
 
         residualList = []
         for edge in path:
-            residualList.append(getResidualCapacity(residualGraph, edge))
+            residualList.append(residualGraph.getResidualCapacity(edge))
         bottleneck = min(residualList)
 
         for edge in path:

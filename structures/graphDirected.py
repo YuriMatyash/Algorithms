@@ -5,7 +5,7 @@ class GraphDirected(Graph):
     def __init__(self, V: list[Node] = [], E: list[tuple] = []):
         self.flow = {}                                      #   dict{Node: dict{Node:Weight}}       <- allows access like self.flow[A][B] == flow from A to B
         super().__init__(V, E)
-        
+
     def addEdge(self, edge: tuple[Node, Node], weight: float = 0, flow: float = 0) -> None:
         source, goal = edge
 
@@ -85,7 +85,8 @@ class GraphDirected(Graph):
         return self.flow.get(left, {}).get(right, 0.0)
 
     # returns how much more flow can be added
-    def getResidualCapacity(self, source: Node, target: Node) -> float:
+    def getResidualCapacity(self, edge: tuple[Node, Node]) -> float:
+        source, target = edge
         capacity = self.weights.get(source, {}).get(target, 0.0)
         used = self.flow.get(source, {}).get(target, 0.0)
         return capacity - used
