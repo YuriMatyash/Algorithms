@@ -386,6 +386,28 @@ def floyd_warshall_example():
         print()
 
 
+def ford_fulkerson_example():
+    s = Node("s")
+    a = Node("a")
+    b = Node("b")
+    c = Node("c")
+    t = Node("t")
+    graph = GraphDirected()
+    for node in [s, a, b, c, t]:
+        graph.addNode(node)
+
+    graph.addEdge((s, a), weight=10)
+    graph.addEdge((s, b), weight=5)
+    graph.addEdge((a, c), weight=15)
+    graph.addEdge((b, c), weight=10)
+    graph.addEdge((c, t), weight=10)
+    graph.addEdge((a, t), weight=10)
+
+    max_flow = ford_fulkerson(graph, s, t)
+
+    print(f"Maximum flow from {s} to {t}: {max_flow}")
+
+
 def main():
     examples = {
         1: BFS_example,
@@ -399,7 +421,8 @@ def main():
         9: DAG_shortest_example,
         10: DAG_longest_example,
         11: CPM_example,
-        12: floyd_warshall_example
+        12: floyd_warshall_example,
+        13: ford_fulkerson_example
     }
     
     while True:
@@ -416,7 +439,8 @@ def main():
             "\n9 - Acyclic Directed Weighted Graph - DAG Single-Source Shortest Path"\
             "\n10 - Acyclic Directed Weighted Graph - DAG Single-Source Longest Path"\
             "\n11 - Acyclic Directed Weighted Graph - CPM"\
-            "\n12 - Directed Weighed Graph - Floyd Warshall"
+            "\n12 - Directed Weighed Graph - Floyd Warshall"\
+            "\n13 - Directed Weighed Graph - Ford Fulkerson"
         )
         print("TO EXIT WRITE 0")
         key = input("Press key: ")

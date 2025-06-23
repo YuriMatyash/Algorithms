@@ -25,7 +25,7 @@ def transpose(graph: GraphDirected) -> GraphDirected:
         left = nodeMap[left_o]
         right = nodeMap[right_o]
 
-        weight = graph.getWeight(left_o, right_o)
+        weight = graph.getWeight((left_o, right_o))
         flow = graph.getFlow((left_o, right_o))
 
         newGraph.addEdge((right,left), weight=weight, flow=flow)      # flips them, that's the whole point of the transpose
@@ -591,7 +591,7 @@ def CPM(graph: Graph) -> tuple[dict[Node,float],dict[Node,Node]]:
 # Works for weights, directed graphs with negative weights
 # Finds all shortest paths for every pair of nodes
 # impressive stuff
-def floyd_warshall(graph: Graph) -> dict[Node, dict[Node, float]]:
+def floyd_warshall(graph: GraphDirected) -> dict[Node, dict[Node, float]]:
     result = {}
     nodes = graph.nodes()
 
@@ -627,8 +627,67 @@ def floyd_warshall(graph: Graph) -> dict[Node, dict[Node, float]]:
 
     return result
 
+# Check if edge is saturated
+# צלע רבוייה
+def isSaturated(graph: GraphDirected, edge: tuple[Node, Node]) -> bool:
+    if graph.getFlow(edge) >= graph.getWeight(edge):
+        return True
+    return False
+
+
+# Simple helper function to get the remaining residual capacity
+def getResidualCapacity(graph: GraphDirected, edge:tuple[Node, Node]) -> int:
+    return graph.getWeight(edge) - graph.getFlow(edge)
+
+
+# Helper function to see if there's a parth between two nodes
+# Returns a list of all edges used to reach the goal
+# Can also extract the Nodes used by simply taking the first Node in each edge throughout the list
+def findPath(graph: GraphDirected, start:Node, target:Node):
+    result = []
+    currNode = target
+    BFSresult = BFS(graph, start)
+
+    if BFSresult[target][1] == None:                # No path found
+        return None
+
+    while currNode != start:
+        prevNode = BFSresult[currNode][1]
+        result.append((prevNode, currNode))
+        currNode = prevNode
+
+    result.reverse()
+    return result
 
 # Ford fulkerson algorithm
-def ford_fulkerson():
-    return
+def ford_fulkerson(graph: GraphDirected, start: Node, target: Node):
+    residualGraph = graph.clone()
 
+    for edge in residualGraph.edges():
+        residualGraph.setFlow(edge, 0)
+        reverseEdge = (edge[1], edge[0])
+        if reverseEdge not in residualGraph.edges():
+            residualGraph.addEdge(reverseEdge, weight=0, flow=0)
+        else:
+            residualGraph.setFlow(reverseEdge, 0)
+    
+    maxFlow = 0
+
+    path = findPath(residualGraph, start, target)
+    while (path):                   # while there exists a path from start to target in the residualGraph
+
+        residualList = []
+        for edge in path:
+            residualList.append(getResidualCapacity(residualGraph, edge))
+        bottleneck = min(residualList)
+
+        for edge in path:
+            reverseEdge = (edge[1], edge[0])
+            residualGraph.setFlow(edge, residualGraph.getFlow(edge) + bottleneck)
+            residualGraph.setFlow(reverseEdge, residualGraph.getFlow(reverseEdge) - bottleneck)
+
+        maxFlow += bottleneck
+
+        path = findPath(residualGraph, start, target)
+    
+    return maxFlow  

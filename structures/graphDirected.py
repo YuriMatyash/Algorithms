@@ -3,9 +3,9 @@ from .node import Node
 
 class GraphDirected(Graph):
     def __init__(self, V: list[Node] = [], E: list[tuple] = []):
-        super().__init__(V, E)
         self.flow = {}                                      #   dict{Node: dict{Node:Weight}}       <- allows access like self.flow[A][B] == flow from A to B
-
+        super().__init__(V, E)
+        
     def addEdge(self, edge: tuple[Node, Node], weight: float = 0, flow: float = 0) -> None:
         source, goal = edge
 
@@ -55,7 +55,7 @@ class GraphDirected(Graph):
             left = nodeMap[left_o]
             right = nodeMap[right_o]
 
-            weight = self.getWeight(left_o, right_o)
+            weight = self.getWeight((left_o, right_o))
             flow = self.getFlow((left_o, right_o))
 
             newGraph.addEdge((left,right), weight=weight, flow= flow)
