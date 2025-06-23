@@ -67,7 +67,8 @@ class GraphDirected(Graph):
     def setWeight(self, edge: tuple[Node, Node], weight: float = 0) -> None:
         self.weights[edge[0]][edge[1]] = weight
 
-    def getWeight(self, left: Node, right: Node) -> float:
+    def getWeight(self, edge: tuple[Node, Node]) -> float:
+        left, right = edge
         return self.weights.get(left, {}).get(right, 0.0)
 
     # Flow stuff
